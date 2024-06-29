@@ -1,4 +1,4 @@
-# ASCII Art Generator
+# ASCII Art Color
 
 ## Description
 This is a simple command-line tool written in Go. It takes a string input entered by the user then returns its graphical representation using the ASCII art characters from the specified banner file.
