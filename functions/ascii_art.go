@@ -20,8 +20,7 @@ func AsciiArt(stringInput string, fileLine []string) string {
 
 	empty := EmptyArray(words)
 	if empty != "false" {
-		fmt.Print(empty)
-		return ""
+		return empty
 	}
 
 	for _, word := range words {
