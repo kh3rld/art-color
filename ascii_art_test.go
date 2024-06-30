@@ -41,7 +41,7 @@ func TestAsciiArtStandard(t *testing.T) {
 			//convert content read from the file to string
 			expectedContentStr := string(expectedContent)
 
-			result := functions.AsciiArt(input, fileLine)
+			result := functions.AsciiArt(input,"", fileLine)
 			if result != expectedContentStr {
 				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", input, expectedContentStr, result)
 			}
@@ -81,7 +81,7 @@ func TestAsciiArtShadow(t *testing.T) {
 			//convert content read from the file to string
 			expectedContentStr := string(expectedContent)
 
-			result := functions.AsciiArt(input, fileLine)
+			result := functions.AsciiArt(input,"", fileLine)
 			if result != expectedContentStr {
 				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", input, expectedContentStr, result)
 			}
@@ -122,7 +122,7 @@ func TestAsciiArtThinkertoy(t *testing.T) {
 			//convert content read from the file to string
 			expectedContentStr := string(expectedContent)
 
-			result := functions.AsciiArt(input, fileLine)
+			result := functions.AsciiArt(input,"", fileLine)
 			if result != expectedContentStr {
 				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", input, expectedContentStr, result)
 			}

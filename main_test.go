@@ -40,7 +40,7 @@ func TestMainFunction(t *testing.T) {
 	//Specify a string input that can be entered by the user
 	input := "hello"
 
-	result := functions.AsciiArt(input, fileLine)
+	result := functions.AsciiArt(input,"", fileLine)
 	if result != expectedContentStr {
 		t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", input, expectedContentStr, result)
 	}

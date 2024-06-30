@@ -78,11 +78,11 @@ func main() {
 	}
 
 	//Write the results to the output file specified by user then print the results.
-	asciiOutput := functions.AsciiArt(stringInput, fileLine)
+	asciiOutput := functions.AsciiArt(stringInput,"he", fileLine)
 	error := os.WriteFile(*output, []byte(asciiOutput), 0644)
 	if error != nil {
 		fmt.Println("Error:", error)
 	} else if flagSet == false {
-		fmt.Print(functions.AsciiArt(stringInput, fileLine))
+		fmt.Print(functions.AsciiArt(stringInput,"he", fileLine))
 	}
 }
