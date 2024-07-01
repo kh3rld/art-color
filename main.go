@@ -1,11 +1,12 @@
 package main
 
 import (
-	"ascii-art-output/functions"
 	"flag"
 	"fmt"
 	"os"
 	"strings"
+
+	"ascii-art-output/functions"
 )
 
 func main() {
@@ -62,27 +63,12 @@ func main() {
 
 	fileLine := strings.Split(string(file), "\n")
 
-	link := ""
-	switch BannerFile {
-	case "standard.txt":
-		link = "https://learn.zone01kisumu.ke/git/root/public/src/branch/master/subjects/ascii-art/standard.txt"
-	case "shadow.txt":
-		link = "https://learn.zone01kisumu.ke/git/root/public/src/branch/master/subjects/ascii-art/shadow.txt"
-	case "thinkertoy.txt":
-		link = "https://learn.zone01kisumu.ke/git/root/public/src/branch/master/subjects/ascii-art/thinkertoy.txt"
-	}
-
-	if len(fileLine) != 856 {
-		fmt.Println("The file", BannerFile, "is not correctly formated, please use the correct version", link, "!!!")
-		return
-	}
-
-	//Write the results to the output file specified by user then print the results.
-	asciiOutput := functions.AsciiArt(stringInput,"he", fileLine)
-	error := os.WriteFile(*output, []byte(asciiOutput), 0644)
+	// Write the results to the output file specified by user then print the results.
+	asciiOutput := functions.AsciiArt(stringInput, "he", fileLine)
+	error := os.WriteFile(*output, []byte(asciiOutput), 0o644)
 	if error != nil {
 		fmt.Println("Error:", error)
-	} else if flagSet == false {
-		fmt.Print(functions.AsciiArt(stringInput,"he", fileLine))
+	} else if !flagSet {
+		fmt.Print(functions.AsciiArt(stringInput, "he", fileLine))
 	}
 }
