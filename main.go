@@ -11,48 +11,66 @@ import (
 	utils "ascii-art-output/utils"
 )
 
+var bannerMap = map[string]bool{
+	"standard":   true,
+	"shadow":     true,
+	"thinkertoy": true,
+}
+
 func main() {
-	// Define and parse flags
-	output := flag.String("output", "output.txt", "File that stores the output.")
+	color := flag.String("color", "", "Color to apply to the substring.")
 	flag.Parse()
 
 	// Check if the number of arguments is valid
-	if len(flag.Args()) < 1 || len(flag.Args()) > 2 {
+	if len(flag.Args()) < 1 || len(flag.Args()) > 3 {
 		utils.PrintUsage()
 		return
 	}
+	var stringInput string
+	var substring string
 
-	stringInput := flag.Args()[0]
+	bannerFile := "standard.txt"
+	isBanner := false
+
+	if bannerMap[flag.Args()[len(flag.Args())-1]] && len(flag.Args()) > 1 {
+		bannerFile = flag.Args()[len(flag.Args())-1] + ".txt"
+		isBanner = true
+	}
+
+	if len(flag.Args()) == 3 && !bannerMap[flag.Args()[2]] {
+		fmt.Println(flag.Args()[2], "is an Invalid Banner")
+		return
+	}
+
+	substring = flag.Args()[0]
+
+	if len(flag.Args()) == 1 {
+		stringInput = flag.Args()[0]
+	} else if len(flag.Args()) == 2 && !isBanner {
+		stringInput = flag.Args()[1]
+	} else if len(flag.Args()) == 3 {
+		stringInput = flag.Args()[1]
+	} else if len(flag.Args()) == 2 && isBanner {
+		stringInput = flag.Args()[0]
+	}
 
 	// Variable to track if the flag was set
 	var nameSet bool
-	var flagSet bool = false
 
 	// Enforce the flag format to be used to be --output=<filename.txt>
 	flag.Visit(func(f *flag.Flag) {
-		if f.Name == "output" {
-			flagSet = true
-			result := strings.Replace(os.Args[1], *output, "", 1)
-			if !(result == "--output=") {
+		if f.Name == "color" {
+			result := strings.Replace(os.Args[1], *color, "", 1)
+			if !(result == "--color=") {
 				nameSet = true
 			}
 		}
 	})
+
 	// defining usage and error handling
 	if nameSet {
-		fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
-		return
-	}
-
-	// Validate output file extension
-	if !strings.HasSuffix(*output, ".txt") {
 		utils.PrintUsage()
 		return
-	}
-
-	bannerFile := "standard.txt"
-	if len(flag.Args()) == 2 {
-		bannerFile = flag.Args()[1] + ".txt"
 	}
 
 	err := utils.ValidateFileChecksum(bannerFile)
@@ -68,17 +86,12 @@ func main() {
 	}
 	fileLines := strings.Split(strings.ReplaceAll(string(file), "\r\n", "\n"), "\n")
 
-	asciiOutput := functions.AsciiArt(stringInput, "he", fileLines)
-
-	// Write to output file
-	err = os.WriteFile(*output, []byte(asciiOutput), 0o644)
-	if err != nil {
-		fmt.Println("Error writing to", *output, ":", err)
-		return
+	var asciioutput string
+	if *color != "" {
+		asciioutput = functions.AsciiArt(stringInput, substring, fileLines)
+	} else {
+		asciioutput = functions.AsciiArt(stringInput, substring, fileLines)
 	}
-
+	fmt.Print(asciioutput)
 	// Print to console if output file not specified
-	if !flagSet {
-		fmt.Print(asciiOutput)
-	}
 }
