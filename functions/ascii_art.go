@@ -28,7 +28,7 @@ func AsciiArt(stringInput, substring string, fileLine []string) string {
 	subEnd := 0
 
 	for _, word := range words {
-		if substring != ""{
+		if substring != "" {
 			index = subStringIndex(word, substring)
 		}
 		if word == "" {
@@ -38,7 +38,7 @@ func AsciiArt(stringInput, substring string, fileLine []string) string {
 				for j := 0; j < len(word); j++ {
 					start := (int(word[j]-' ') * 9) + 1 // calculating the begining of a character based on data from standard.txt
 
-					if subIndex(j, index){
+					if subIndex(j, index) {
 						sub = true
 						subEnd = j + len(substring)
 						result += "\033[38;2;0;0;255m"
@@ -46,12 +46,11 @@ func AsciiArt(stringInput, substring string, fileLine []string) string {
 
 					result += fileLine[start+i]
 
-					if sub && subEnd == j+1{
+					if sub && subEnd == j+1 {
 						sub = false
 						result += "\033[0m"
 					}
 
-					
 				}
 				result += "\n"
 			}
@@ -85,28 +84,27 @@ func EmptyArray(words []string) string {
 	return result
 }
 
-func subStringIndex(s, subStr string)[]int{
+func subStringIndex(s, subStr string) []int {
 	index := []int{}
 	position := 0
 
 	for {
-
 		idx := strings.Index(s, subStr)
-		if idx == -1{
+		if idx == -1 {
 			break
 		}
 		index = append(index, idx+position)
 		s = s[len(subStr)+idx:]
-		position += len(subStr)
+		position += len(subStr) + idx
 	}
 	fmt.Println(index)
 
 	return index
 }
 
-func subIndex(num int, index []int)bool{
-	for _, idx := range index{
-		if idx == num{
+func subIndex(num int, index []int) bool {
+	for _, idx := range index {
+		if idx == num {
 			return true
 		}
 	}
