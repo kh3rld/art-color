@@ -7,15 +7,17 @@ import (
 	"strings"
 
 	"ascii-art-output/functions"
+	utils "ascii-art-output/utils"
 )
 
 func main() {
-	// Define flag that will be used to specify the output file
+	// Define and parse flags
 	output := flag.String("output", "output.txt", "File that stores the output.")
 	flag.Parse()
 
-	if len(flag.Args()) > 2 || len(flag.Args()) < 1 {
-		fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
+	// Check if the number of arguments is valid
+	if len(flag.Args()) < 1 || len(flag.Args()) > 2 {
+		utils.PrintUsage()
 		return
 	}
 
@@ -41,34 +43,35 @@ func main() {
 		return
 	}
 
-	if !(strings.HasSuffix(*output, ".txt")) {
-		fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
+	// Validate output file extension
+	if !strings.HasSuffix(*output, ".txt") {
+		utils.PrintUsage()
 		return
 	}
 
-	BannerFile := "standard.txt"
-
+	bannerFile := "standard.txt"
 	if len(flag.Args()) == 2 {
-		banner := strings.Replace(flag.Args()[1], ".txt", "", 1)
-		BannerFile = banner + ".txt"
+		bannerFile = flag.Args()[1] + ".txt"
 	}
 
-	// read banner file specified
-	file, err := os.ReadFile(BannerFile)
+	file, err := os.ReadFile(bannerFile)
 	if err != nil {
-		fmt.Println("Error openning", BannerFile, err)
+		fmt.Println("Error opening", bannerFile, ":", err)
 		return
 	}
-	file = []byte(strings.Replace(string(file), "\r\n", "\n", -1))
+	fileLines := strings.Split(strings.ReplaceAll(string(file), "\r\n", "\n"), "\n")
 
-	fileLine := strings.Split(string(file), "\n")
+	asciiOutput := functions.AsciiArt(stringInput, "he", fileLines)
 
-	// Write the results to the output file specified by user then print the results.
-	asciiOutput := functions.AsciiArt(stringInput, "he", fileLine)
-	error := os.WriteFile(*output, []byte(asciiOutput), 0o644)
-	if error != nil {
-		fmt.Println("Error:", error)
-	} else if !flagSet {
-		fmt.Print(functions.AsciiArt(stringInput, "he", fileLine))
+	// Write to output file
+	err = os.WriteFile(*output, []byte(asciiOutput), 0o644)
+	if err != nil {
+		fmt.Println("Error writing to", *output, ":", err)
+		return
+	}
+
+	// Print to console if output file not specified
+	if !flagSet {
+		fmt.Print(asciiOutput)
 	}
 }
