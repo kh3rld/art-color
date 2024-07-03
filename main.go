@@ -57,7 +57,7 @@ func main() {
 	// Variable to track if the flag was set
 	var nameSet bool
 
-	// Enforce the flag format to be used to be --output=<filename.txt>
+	// Enforce the flag format to be used to be --color=<color>
 	flag.Visit(func(f *flag.Flag) {
 		if f.Name == "color" {
 			result := strings.Replace(os.Args[1], *color, "", 1)
