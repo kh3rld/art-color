@@ -8,20 +8,17 @@ This is a simple command-line tool written in Go. It takes a string input entere
 2. **Install go**: Ensure you have Go installed on your machine.
 3. **Run Program**: Execute the program by providing the flag, input string, and banner file as command-line arguments. 
     ```bash
-    go run . --output=<filename.txt> something standard
+    go run . --color=<color> <substring to be colored> "something"
     ```
 
     Example :
 
     ```bash
-    go run . --output=<output.txt> hello standard
+    go run . --color=red kit "a king kitten have kit"
     ```
-    This will return the graphical representation of the input string "hello". The results will be written to the specified output.txt file.
-    ```bash
-    cat -e output.txt
-    ```
+    This will return the colored graphical representation of the string "kit".
 
-    ```bash
+    ```ruby
      _              _   _          
     | |            | | | |         
     | |__     ___  | | | |   ___   
@@ -53,5 +50,4 @@ The main_test.go file tests the whole program while ascii_art_test.go tests the 
 ## Collaborators
 
 * **[Tomlee Abila](https://github.com/Tomlee-abila/)**
-* **[samuel omulo](https://github.com/somulo1/)**
-* **[Rabin Otieno](https://github.com/Rabinnnn/)**
+* **[Kherld Hussein](https://github.com/kherldhussein/)**
