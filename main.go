@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -52,6 +53,12 @@ func main() {
 	bannerFile := "standard.txt"
 	if len(flag.Args()) == 2 {
 		bannerFile = flag.Args()[1] + ".txt"
+	}
+
+	err := utils.ValidateFileChecksum(bannerFile)
+	if err != nil {
+		log.Printf("Error downloading or validating file: %v", err)
+		return
 	}
 
 	file, err := os.ReadFile(bannerFile)
