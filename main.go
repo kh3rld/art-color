@@ -73,25 +73,20 @@ func main() {
 		return
 	}
 
-	err := utils.ValidateFileChecksum(bannerFile)
-	if err != nil {
+	// Validate banner file checksum
+	if err := utils.ValidateFileChecksum(bannerFile); err != nil {
 		log.Printf("Error downloading or validating file: %v", err)
 		return
 	}
 
 	file, err := os.ReadFile(bannerFile)
 	if err != nil {
-		fmt.Println("Error opening", bannerFile, ":", err)
+		log.Printf("Error opening %s: %v", bannerFile, err)
 		return
 	}
 	fileLines := strings.Split(strings.ReplaceAll(string(file), "\r\n", "\n"), "\n")
 
-	var asciioutput string
-	if *color != "" {
-		asciioutput = functions.AsciiArt(stringInput, substring, fileLines)
-	} else {
-		asciioutput = functions.AsciiArt(stringInput, substring, fileLines)
-	}
+	// Generate ASCII art output with specified color
+	asciioutput := functions.AsciiArt(stringInput, substring, fileLines, *color)
 	fmt.Print(asciioutput)
-	// Print to console if output file not specified
 }
