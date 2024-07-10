@@ -5,18 +5,19 @@ import (
 	"strings"
 )
 
-func AsciiArt(stringInput, substring string, fileLine []string) string {
+// AsciiArt generates ASCII art with optional substring highlighting and color.
+func AsciiArt(stringInput, substring string, fileLines []string, color string) string {
 	result := ""
 	index := []int{}
 
-	// replacing every instance of new line with the newline character (\n)
+	// Replace newline characters with "\\n"
 	stringInput = strings.Replace(stringInput, "\n", "\\n", -1)
 
 	if !ValidSentence(stringInput) {
 		return ""
 	}
 
-	// slicing the input based on the presence of the string "\n"
+	// Split stringInput into words based on "\\n"
 	words := strings.Split(stringInput, "\\n")
 
 	empty := EmptyArray(words)
@@ -36,21 +37,20 @@ func AsciiArt(stringInput, substring string, fileLine []string) string {
 		} else {
 			for i := 0; i < 8; i++ {
 				for j := 0; j < len(word); j++ {
-					start := (int(word[j]-' ') * 9) + 1 // calculating the begining of a character based on data from standard.txt
+					start := (int(word[j]-' ') * 9) + 1 // Calculate start based on ' ' to ASCII offset
 
 					if subIndex(j, index) {
 						sub = true
 						subEnd = j + len(substring)
-						result += "\033[38;2;0;0;255m"
+						result += GetColorEscapeCode(color)
 					}
 
-					result += fileLine[start+i]
+					result += fileLines[start+i]
 
 					if sub && subEnd == j+1 {
 						sub = false
 						result += "\033[0m"
 					}
-
 				}
 				result += "\n"
 			}
@@ -59,6 +59,47 @@ func AsciiArt(stringInput, substring string, fileLine []string) string {
 	return result
 }
 
+// ANSI escape code for the specified color
+func GetColorEscapeCode(color string) string {
+	switch color {
+	case "red":
+		return "\033[38;2;255;0;0m"
+	case "green":
+		return "\033[38;2;0;255;0m"
+	case "blue":
+		return "\033[38;2;0;0;255m"
+	case "yellow":
+		return "\033[38;2;255;255;0m"
+	case "cyan":
+		return "\033[38;2;0;255;255m"
+	case "magenta":
+		return "\033[38;2;255;0;255m"
+	case "white":
+		return "\033[38;2;255;255;255m"
+	case "black":
+		return "\033[38;2;0;0;0m"
+	case "orange":
+		return "\033[38;2;255;165;0m"
+	case "purple":
+		return "\033[38;2;128;0;128m"
+	case "brown":
+		return "\033[38;2;165;42;42m"
+	case "pink":
+		return "\033[38;2;255;192;203m"
+	case "gray":
+		return "\033[38;2;128;128;128m"
+	case "navy":
+		return "\033[38;2;0;0;128m"
+	case "teal":
+		return "\033[38;2;0;128;128m"
+	case "olive":
+		return "\033[38;2;128;128;0m"
+	default:
+		return "\033[0m"
+	}
+}
+
+// ValidSentence checks if a sentence contains valid characters
 func ValidSentence(word string) bool {
 	for _, letter := range word {
 		if !(letter >= ' ' && letter <= '~') {
