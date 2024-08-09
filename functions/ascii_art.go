@@ -138,7 +138,6 @@ func subStringIndex(s, subStr string) []int {
 		s = s[len(subStr)+idx:]
 		position += len(subStr) + idx
 	}
-	fmt.Println(index)
 
 	return index
 }
