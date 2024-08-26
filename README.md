@@ -14,9 +14,10 @@ This is a simple command-line tool written in Go. It takes a string input entere
     Example :
 
     ```bash
-    go run . --color=red kit "a king kitten have kit"
+    go run . --color=red kit "kitten have kit"
     ```
     This will return the colored graphical representation of the string "kit".
+    ![](image.png)
 
     ```ruby
      _              _   _          
