@@ -17,6 +17,12 @@ func AsciiArt(stringInput, substring string, fileLines []string, color string) s
 		return ""
 	}
 
+	color = GetColorEscapeCode(color)
+
+	if color == "error" {
+		return "Invalid Input, provide a valid color\n"
+	}
+
 	// Split stringInput into words based on "\\n"
 	words := strings.Split(stringInput, "\\n")
 
@@ -42,7 +48,7 @@ func AsciiArt(stringInput, substring string, fileLines []string, color string) s
 					if subIndex(j, index) {
 						sub = true
 						subEnd = j + len(substring)
-						result += GetColorEscapeCode(color)
+						result += color
 					}
 
 					result += fileLines[start+i]
@@ -95,7 +101,7 @@ func GetColorEscapeCode(color string) string {
 	case "olive":
 		return "\033[38;2;128;128;0m"
 	default:
-		return "\033[0m"
+		return "error"
 	}
 }
 
