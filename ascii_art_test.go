@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -9,39 +8,43 @@ import (
 	"ascii-art-output/functions"
 )
 
+type inputs struct {
+	str      string
+	subStr   string
+	path     string
+	color    string
+}
+
 func TestAsciiArtStandard(t *testing.T) {
 	inputFile := "standard.txt"
 	file, err := os.ReadFile(inputFile)
 	if err != nil {
-		fmt.Println("Error: ", err)
-		os.Exit(1)
+		t.Fatalf("Error reading file '%s': %v", inputFile, err)
 	}
 
-	fileLine := strings.Split(string(file), "\n")
+	fileLines := strings.Split(string(file), "\n")
 
-	// create a map containing the input text as key and the path to its expected output as value
-	test_cases := map[string]string{
-		"hello":         "test_cases/expectedOutput1.txt",
-		"you & me":      "test_cases/expectedOutput2.txt",
-		"Hello\\nThere": "test_cases/expectedOutput3.txt",
-		"{Hello There}": "test_cases/expectedOutput4.txt",
-		"1Hello 2There": "test_cases/expectedOutput5.txt",
+	testCases := []inputs{
+		{"hello", "ll", "test_cases/expectedOutput1.txt", "red"},
+		{"you & me", "&", "test_cases/expectedOutput2.txt", "green"},
+		{"Hello\\nThere", "e", "test_cases/expectedOutput3.txt", "blue"},
+		{"{Hello There}", "o T", "test_cases/expectedOutput4.txt", "yellow"},
+		{"1Hello 2There", "el", "test_cases/expectedOutput5.txt", "orange"},
 	}
 
-	for input, expectedFilePath := range test_cases {
-		// subtest to get the content from the file in the specified filepath
-		t.Run(input, func(t *testing.T) {
-			expectedContent, err := os.ReadFile(expectedFilePath)
+	for _, tc := range testCases {
+		t.Run(tc.str, func(t *testing.T) {
+			expectedContent, err := os.ReadFile(tc.path)
 			if err != nil {
-				t.Fatalf("Failed to read expected output file '%s' for input '%s': %v", expectedFilePath, input, err)
+				t.Fatalf("Failed to read expected output file '%s' for input '%s': %v", tc.path, tc.str, err)
 			}
 
-			// convert content read from the file to string
 			expectedContentStr := string(expectedContent)
 
-			result := functions.AsciiArt(input, "", fileLine)
+			result := functions.AsciiArt(tc.str, tc.subStr, fileLines, tc.color)
+			
 			if result != expectedContentStr {
-				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", input, expectedContentStr, result)
+				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", tc.str, expectedContentStr, result)
 			}
 		})
 	}
@@ -51,33 +54,29 @@ func TestAsciiArtShadow(t *testing.T) {
 	inputFile := "shadow.txt"
 	file, err := os.ReadFile(inputFile)
 	if err != nil {
-		fmt.Println("Error: ", err)
-		os.Exit(1)
+		t.Fatalf("Error reading file '%s': %v", inputFile, err)
 	}
 
-	fileLine := strings.Split(string(file), "\n")
+	fileLines := strings.Split(string(file), "\n")
 
-	// create a map containing the input text as key and the path to its expected output as value
-	test_cases := map[string]string{
-		"hello world":                "test_cases/expectedOutput6.txt",
-		"123":                        "test_cases/expectedOutput7.txt",
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ": "test_cases/expectedOutput8.txt",
+	testCases := []inputs{
+		{"hello world", "rl", "test_cases/expectedOutput6.txt", "green"},
+		{"123", "2", "test_cases/expectedOutput7.txt", "yellow"},
+		{"ABCDEFGHIJKLMNOPQRSTUVWXYZ", "LMN", "test_cases/expectedOutput8.txt", "red"},
 	}
 
-	for input, expectedFilePath := range test_cases {
-		// subtest to get the content from the file in the specified filepath
-		t.Run(input, func(t *testing.T) {
-			expectedContent, err := os.ReadFile(expectedFilePath)
+	for _, tc := range testCases {
+		t.Run(tc.str, func(t *testing.T) {
+			expectedContent, err := os.ReadFile(tc.path)
 			if err != nil {
-				t.Fatalf("Failed to read expected output file '%s' for input '%s': %v", expectedFilePath, input, err)
+				t.Fatalf("Failed to read expected output file '%s' for input '%s': %v", tc.path, tc.str, err)
 			}
 
-			// convert content read from the file to string
 			expectedContentStr := string(expectedContent)
 
-			result := functions.AsciiArt(input, "", fileLine)
+			result := functions.AsciiArt(tc.str, tc.subStr, fileLines, tc.color)			
 			if result != expectedContentStr {
-				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", input, expectedContentStr, result)
+				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", tc.str, expectedContentStr, result)
 			}
 		})
 	}
@@ -87,34 +86,31 @@ func TestAsciiArtThinkertoy(t *testing.T) {
 	inputFile := "thinkertoy.txt"
 	file, err := os.ReadFile(inputFile)
 	if err != nil {
-		fmt.Println("Error: ", err)
-		os.Exit(1)
+		t.Fatalf("Error reading file '%s': %v", inputFile, err)
 	}
 
-	fileLine := strings.Split(string(file), "\n")
+	fileLines := strings.Split(string(file), "\n")
 
-	// create a map containing the input text as key and the path to its expected output as value
-	test_cases := map[string]string{
-		"nice 2 meet you": "test_cases/expectedOutput9.txt",
-		"/(\")":           "test_cases/expectedOutput10.txt",
-		"\"#$%&/()*+,-./": "test_cases/expectedOutput11.txt",
-		"It's Working":    "test_cases/expectedOutput12.txt",
+	testCases := []inputs{
+		{"nice 2 meet you", "meet", "test_cases/expectedOutput9.txt", "red"},
+		{"/(\\\")", "(", "test_cases/expectedOutput10.txt", "yellow"},
+		{"\"#$%&/()*+,-./", "./", "test_cases/expectedOutput11.txt", "green"},
+		{"It's Working", "t's Wor", "test_cases/expectedOutput12.txt", "orange"},
 	}
 
-	for input, expectedFilePath := range test_cases {
-		// subtest to get the content from the file in the specified filepath
-		t.Run(input, func(t *testing.T) {
-			expectedContent, err := os.ReadFile(expectedFilePath)
+	for _, tc := range testCases {
+		t.Run(tc.str, func(t *testing.T) {
+			expectedContent, err := os.ReadFile(tc.path)
 			if err != nil {
-				t.Fatalf("Failed to read expected output file '%s' for input '%s': %v", expectedFilePath, input, err)
+				t.Fatalf("Failed to read expected output file '%s' for input '%s': %v", tc.path, tc.str, err)
 			}
 
-			// convert content read from the file to string
 			expectedContentStr := string(expectedContent)
 
-			result := functions.AsciiArt(input, "", fileLine)
+			result := functions.AsciiArt(tc.str, tc.subStr, fileLines, tc.color)
+			
 			if result != expectedContentStr {
-				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", input, expectedContentStr, result)
+				t.Errorf("For input:\n'%s'\nExpected:\n%s\n but got:\n%s", tc.str, expectedContentStr, result)
 			}
 		})
 	}
