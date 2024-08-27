@@ -37,6 +37,9 @@ func AsciiArt(stringInput, substring string, fileLines []string, color string) s
 	for _, word := range words {
 		if substring != "" {
 			index = subStringIndex(word, substring)
+		}else{
+			substring = word
+			index = subStringIndex(word, substring)
 		}
 		if word == "" {
 			result += "\n"
@@ -67,6 +70,7 @@ func AsciiArt(stringInput, substring string, fileLines []string, color string) s
 
 // ANSI specified color
 func GetColorEscapeCode(color string) string {
+	color = strings.ToLower(color)
 	switch color {
 	case "":
 		return "\033[0m"
