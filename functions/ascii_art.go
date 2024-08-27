@@ -68,6 +68,8 @@ func AsciiArt(stringInput, substring string, fileLines []string, color string) s
 // ANSI specified color
 func GetColorEscapeCode(color string) string {
 	switch color {
+	case "":
+		return "\033[0m"
 	case "red":
 		return "\033[38;2;255;0;0m"
 	case "green":
